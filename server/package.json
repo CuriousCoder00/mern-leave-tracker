@@ -1,0 +1,27 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "Leave Tracker Web Server - responsible for database management, routes management etc etc...",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CuriousCoder00/mern-leave-tracker.git"
+  },
+  "keywords": [
+    "express",
+    "mongodb",
+    "mongoose",
+    "node",
+    "javascript",
+    "express-validator"
+  ],
+  "author": "HyperVio Academy - Kapil",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CuriousCoder00/mern-leave-tracker/issues"
+  },
+  "homepage": "https://github.com/CuriousCoder00/mern-leave-tracker#readme"
+}
