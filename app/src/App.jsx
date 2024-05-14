@@ -13,6 +13,7 @@ import Home from "./pages/Home";
 import Sidebar from "./components/Sidebar";
 import History from "./pages/History";
 import PageNotFound from "./pages/PageNotFound";
+import Vacations from "./pages/Vacations";
 
 function App() {
   const [isAuthenticated, isUserAuthenticated] = useState(true);
@@ -23,7 +24,13 @@ function App() {
       <>
         <Navbar toggleNav={toggleNav} setToggleNav={setToggleNav} />
         <div className="flex">
-          <div className={`${toggleNav?'absolute md:static transition-all bg-sky-900 md:flex':'hidden md:flex'}`}>
+          <div
+            className={`${
+              toggleNav
+                ? "absolute md:static transition-all bg-sky-900 md:flex"
+                : "hidden md:flex"
+            }`}
+          >
             <Sidebar toggleNav={toggleNav} setToggleNav={setToggleNav} />
           </div>
           <div className="border rounded-lg w-full bg-slate-200 mb-4">
@@ -62,7 +69,20 @@ function App() {
           path="/"
           element={<PrivateRoute isAuthenticated={isAuthenticated} />}
         >
-          <Route path="/*" element={<PageNotFound />} />
+          <Route exact path="/vacations" element=<Vacations /> />
+        </Route>
+        <Route
+          path="/"
+          element={<PrivateRoute isAuthenticated={isAuthenticated} />}
+        >
+          <Route
+            path="/*"
+            element={
+              <div className="w-screen h-screen absolute top-0 left-0">
+                <PageNotFound />
+              </div>
+            }
+          />
         </Route>
       </Routes>
     </Router>
