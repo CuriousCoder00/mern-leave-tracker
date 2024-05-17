@@ -16,5 +16,4 @@ router.post("/register", userRegistrationValidation, userRegistration);
 router.post("/login", userLoginValidation, userLogin);
 router.post("/logout", userLogout);
 router.post("/apply-leave", verifyToken, applyLeave);
-
 module.exports = router;

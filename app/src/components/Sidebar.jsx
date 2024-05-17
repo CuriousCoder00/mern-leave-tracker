@@ -11,7 +11,7 @@ const Sidebar = (props) => {
     <div
       className={`relative transition-all ${
         toggleNav ? "justify-start" : ""
-      } border-none mx-2 h-[90vh] flex`}
+      } border-none mx-2 h-[88vh] flex`}
     >
       <div className="bg-sky-700 transition-all p-2 rounded-lg flex m-1 gap-2 items-center flex-col justify-start">
         <Link

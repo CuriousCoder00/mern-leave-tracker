@@ -2,14 +2,13 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 import Logo from "./Logo";
-
-import { FaUserCircle } from "react-icons/fa";
+import AVATAR from "../assets/avatar.png";
 import { VscClose, VscMenu } from "react-icons/vsc";
-import UserProfile from "./UserProfile";
+import { GoSignOut } from "react-icons/go";
 
 const Navbar = (props) => {
   // eslint-disable-next-line react/prop-types
-  const {toggleNav, setToggleNav} = props;
+  const { toggleNav, setToggleNav } = props;
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   return (
@@ -35,27 +34,35 @@ const Navbar = (props) => {
             </div>
           )}
         </div>
-        <div className="flex transition-all justify-center items-center text-sky-200">
-          {showProfileMenu ? (
-            <>
-              <VscClose
-                className="text-2xl transition-all z-30 text-slate-500 hover:scale-125 cursor-pointer"
-                onClick={() => {
-                  setShowProfileMenu(!showProfileMenu);
-                }}
-              />
-              <UserProfile
-                closeToggle={showProfileMenu}
-                setCloseToggle={setShowProfileMenu}
-              />
-            </>
-          ) : (
-            <FaUserCircle
-              className="text-2xl transition-transform cursor-pointer hover:scale-125"
-              onClick={() => {
-                setShowProfileMenu(!showProfileMenu);
-              }}
+        <div className="relative">
+          <button
+            className="rounded-full  overflow-hidden cursor-pointer hover:scale-110 transition-all delay-75 "
+            onClick={() => {
+              setShowProfileMenu(!showProfileMenu);
+            }}
+          >
+            <img
+              src={AVATAR}
+              alt="profile avatar"
+              className="w-[1.52rem] h-[1.52rem]"
             />
+          </button>
+          {showProfileMenu && (
+            <>
+              <div className="flex mt-1 right-0 bg-white absolute z-20 justify-center items-start rounded-lg">
+                <div className="w-52 py-3">
+                  <div className="block py-2 hover:bg-sky-600 transition-all delay-75 hover:text-slate-100 cursor-pointer text-slate-900">
+                    <span className="px-2">Account Settings</span>
+                  </div>
+                  <div className="block py-2 hover:bg-sky-600 transition-all delay-75  hover:text-slate-100 cursor-pointer text-slate-900">
+                    <span className="px-2">
+                      Logout
+                      <GoSignOut className="inline mx-2" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>

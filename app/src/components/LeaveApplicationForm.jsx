@@ -9,13 +9,12 @@ const LeaveApplicationForm = () => {
   var dd = String(currentDate.getDate()).padStart(2, "0");
   var mm = String(currentDate.getMonth() + 1).padStart(2, "0");
   var yyyy = currentDate.getFullYear();
-
   currentDate = yyyy + "-" + mm + "-" + dd;
   const oneDay = 24 * 60 * 60 * 1000;
   const firstDate = new Date(startDate);
   const secondDate = new Date(endDate);
   const calculatedLeaveDuration = Math.round(
-    Math.abs((firstDate - secondDate) / oneDay)
+    Math.abs(Math.ceil((firstDate - secondDate) / oneDay))
   );
   const handleStartDateChange = (e) => {
     e.preventDefault();
@@ -33,7 +32,7 @@ const LeaveApplicationForm = () => {
         <h1 className="font-medium">Leave Application</h1>
       </div>
       <div className="flex gap-3 flex-wrap">
-        <div className="flex flex-col w-full lg:w-1/4 md:w-1/4 sm:w-1/3">
+        <div className="flex flex-col w-full lg:w-1/4 md:w-1/4 sm:w-[45%]">
           <label htmlFor="leaveType">Leave Type</label>
           <select
             name="leaveType"
@@ -68,13 +67,17 @@ const LeaveApplicationForm = () => {
             className="outline-none p-1 text-slate-700 rounded-lg shadow-md"
           />
         </div>
-        <div className="flex flex-col w-full md:w-1/3 sm:w-1/4">
+        <div className="flex flex-col w-full xl:w-[38%] lg:w-[37.5%] md:w-[35.5%] sm:w-full">
           <label htmlFor="leaveDuration">Leave Duration</label>
           <input
             type="text"
             name="employeeName"
             id="employeeName"
-            value={calculatedLeaveDuration ? calculatedLeaveDuration + 1 : ""}
+            value={
+              calculatedLeaveDuration
+                ? calculatedLeaveDuration + " Days"
+                : ""
+            }
             className="outline-none p-1 rounded-lg shadow-md"
             readOnly
           />
