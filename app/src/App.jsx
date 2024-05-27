@@ -27,7 +27,7 @@ function App() {
           <div
             className={`${
               toggleNav
-                ? "absolute md:static transition-all bg-sky-900 md:flex"
+                ? "absolute md:static transition-all delay-100 bg-sky-900 md:flex"
                 : "hidden md:flex"
             }`}
           >

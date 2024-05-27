@@ -8,31 +8,34 @@ const initialState = {
   confirmPassword: "",
 };
 
-
 const RegisterForm = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const handlePasswordChange = (e) => {
-    e.preventDefault();
-    setPassword(e.target.value);
+  const [register, setRegister] = useState(initialState);
+  const [error, setError] = useState("");
+  const onInputChange = (e) => {
+    setRegister({ ...register, [e.target.name]: e.target.value });
   };
-  const handleConfirmPasswordChange = (e) => {
-    e.preventDefault();
-    setConfirmPassword(e.target.value);
-  };
-  const matchResultError =
-    password === confirmPassword ? null : "Password Did Not Match";
+  const matchResult = register.password === register.confirmPassword;
 
   const passwordValidationResult =
-    password.length >= 8 &&
-    /[A-Z]/.test(password) &&
-    /[a-z]/.test(password) &&
-    /[@$!%*?&]/.test(password);
+    register.password.length >= 8 &&
+    /[A-Z]/.test(register.password) &&
+    /[a-z]/.test(register.password) &&
+    /[@$!%*?&]/.test(register.password);
+
+  // handle registration
+  const handleRegistration = async (e) => {
+    e.preventDefault();
+    if (matchResult && passwordValidationResult) {
+      console.log('....');
+    }
+  };
+
   return (
     <form className="flex flex-col gap-4 w-full mt-4">
       <input
         type="text"
         name="name"
+        onChange={(e) => onInputChange(e)}
         autoComplete="name"
         placeholder="Enter Your Name..."
         className="p-2 border-b-2 border-sky-300 focus:outline-none focus:border-sky-500 rounded-md text-slate-600"
@@ -41,6 +44,7 @@ const RegisterForm = () => {
       <input
         type="email"
         name="email"
+        onChange={(e) => onInputChange(e)}
         autoComplete="email"
         placeholder="Enter Your Email..."
         className="p-2 border-b-2 border-sky-300 focus:outline-none focus:border-sky-500 rounded-md text-slate-600"
@@ -51,7 +55,7 @@ const RegisterForm = () => {
         pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
         name="password"
         autoComplete="new-password"
-        onChange={handlePasswordChange}
+        onChange={(e) => onInputChange(e)}
         placeholder="Enter Your Password..."
         className="p-2 border-b-2 border-sky-300 focus:outline-none focus:border-sky-500 rounded-md text-slate-600"
         required
@@ -59,17 +63,19 @@ const RegisterForm = () => {
 
       <input
         type="password"
+        name="confirmPassword"
+        id="confirmPassword"
         placeholder="Confirm Password"
         autoComplete="new-password"
-        onChange={handleConfirmPasswordChange}
+        onChange={(e) => onInputChange(e)}
         className={`p-2 border-2 focus:outline-none ${
-          matchResultError
+          !matchResult
             ? "focus:border-red-400 shadow-lg shadow-red-400"
             : "focus:border-emerald-500 shadow-lg shadow-emerald-400"
         } rounded-md text-slate-600`}
         required
       />
-      {!matchResultError && passwordValidationResult ? (
+      {matchResult && passwordValidationResult ? (
         <div className="flex text-xs items-center gap-2 text-slate-300">
           <FaCheck className="text-emerald-500" />
           All password validations passed successfully
@@ -82,7 +88,7 @@ const RegisterForm = () => {
                 className="flex items-center gap-2 text-slate-300"
                 id="minLength"
               >
-                {password.length >= 8 ? (
+                {register.password.length >= 8 ? (
                   <FaCheck className="text-green-500" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -93,7 +99,7 @@ const RegisterForm = () => {
                 className="flex items-center gap-2 text-slate-300"
                 id="uppercase"
               >
-                {/[A-Z]/.test(password) ? (
+                {/[A-Z]/.test(register.password) ? (
                   <FaCheck className="text-green-500" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -104,7 +110,7 @@ const RegisterForm = () => {
                 className="flex items-center gap-2 text-slate-300"
                 id="lowercase"
               >
-                {/[a-z]/.test(password) ? (
+                {/[a-z]/.test(register.password) ? (
                   <FaCheck className="text-green-500" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -115,7 +121,7 @@ const RegisterForm = () => {
                 className="flex items-center gap-2 text-slate-300"
                 id="symbol"
               >
-                {/[@$!%*?&]/.test(password) ? (
+                {/[@$!%*?&]/.test(register.password) ? (
                   <FaCheck className="text-green-500" />
                 ) : (
                   <FaTimes className="text-red-500" />
@@ -126,7 +132,11 @@ const RegisterForm = () => {
           </div>
         </div>
       )}
-      <button className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-500">
+      {error && <div className="text-red-500 text-xs text-center">{error}</div>}
+      <button
+        className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-500"
+        onClick={handleRegistration}
+      >
         Register
       </button>
     </form>

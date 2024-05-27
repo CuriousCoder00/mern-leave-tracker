@@ -29,7 +29,7 @@ const LeaveApplicationForm = () => {
   return (
     <div className="flex mt-2 flex-col gap-5 shadow-md shadow-sky-900 w-full p-4 rounded-lg">
       <div>
-        <h1 className="font-medium">Leave Application</h1>
+        <h1 className="font-bold">Fill the Form to Apply for Leave</h1>
       </div>
       <div className="flex gap-3 flex-wrap">
         <div className="flex flex-col w-full lg:w-1/4 md:w-1/4 sm:w-[45%]">

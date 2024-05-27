@@ -11,7 +11,7 @@ const Sidebar = (props) => {
     <div
       className={`relative transition-all ${
         toggleNav ? "justify-start" : ""
-      } border-none mx-2 h-[88vh] flex`}
+      } border-none delay-75 mx-2 h-[88vh] flex`}
     >
       <div className="bg-sky-700 transition-all p-2 rounded-lg flex m-1 gap-2 items-center flex-col justify-start">
         <Link
@@ -19,14 +19,14 @@ const Sidebar = (props) => {
           className="flex w-full hover:bg-sky-600 cursor-pointer rounded-lg p-2 text-sky-100 gap-3 items-center"
         >
           <FaWpforms className="text-xl " />
-          <span className={`${toggleNav ? "text-sm bold" : "hidden"}`}>Apply</span>
+          <span className={`${toggleNav ? "text-sm bold transition-all delay-75" : "hidden"}`}>Apply</span>
         </Link>
         <Link
           to="/history"
           className="flex w-full hover:bg-sky-600 cursor-pointer rounded-lg p-2 text-sky-100 gap-3 items-center"
         >
           <FaHistory className="text-xl " />
-          <span className={`${toggleNav ? "text-sm bold" : "hidden"}`}>
+          <span className={`${toggleNav ? "text-sm bold transition-all delay-75" : "hidden"}`}>
             History
           </span>
         </Link>
@@ -35,7 +35,7 @@ const Sidebar = (props) => {
           className="flex w-full hover:bg-sky-600 cursor-pointer rounded-lg p-2 text-sky-100 gap-3 items-center"
         >
           <FaCalendar className="text-xl " />
-          <span className={`${toggleNav ? "text-sm bold" : "hidden"}`}>
+          <span className={`${toggleNav ? "text-sm bold transition-all delay-75" : "hidden"}`}>
             Vacations
           </span>
         </Link>

@@ -15,20 +15,20 @@ const Navbar = (props) => {
     <>
       <div className={`justify-between flex items-center p-5 transition-all`}>
         <div className="flex gap-5 items-center">
-          <Link to="/">
-            <Logo />
+          <Link to="/"  className='hover:scale-95 transition-all delay-100'>
+            <Logo/>
           </Link>
           {toggleNav ? (
-            <div className="flex justify-end">
+            <div className="flex">
               <VscClose
-                className={`text-2xl cursor-pointer justify-end text-white hover:text-slate-200`}
+                className={`text-2xl cursor-pointer transition-all delay-100 justify-end hover:scale-110 text-white hover:text-slate-200`}
                 onClick={() => setToggleNav(!toggleNav)}
               />
             </div>
           ) : (
-            <div className="flex">
+            <div className="flex ">
               <VscMenu
-                className="text-xl cursor-pointer text-white hover:text-slate-200"
+                className="text-2xl cursor-pointer transition-all delay-100  text-white hover:text-slate-200 hover:scale-110"
                 onClick={() => setToggleNav(!toggleNav)}
               />
             </div>
@@ -36,7 +36,7 @@ const Navbar = (props) => {
         </div>
         <div className="relative">
           <button
-            className="rounded-full  overflow-hidden cursor-pointer hover:scale-110 transition-all delay-75 "
+            className={`rounded-full ${showProfileMenu?"shadow-md shadow-sky-500 border-[1px]":""} overflow-hidden cursor-pointer hover:scale-110 transition-all delay-75`}
             onClick={() => {
               setShowProfileMenu(!showProfileMenu);
             }}
@@ -49,7 +49,7 @@ const Navbar = (props) => {
           </button>
           {showProfileMenu && (
             <>
-              <div className="flex mt-1 right-0 bg-white absolute z-20 justify-center items-start rounded-lg">
+              <div className="flex mt-2 right-0 bg-white absolute z-20 justify-center items-start rounded-lg">
                 <div className="w-52 py-3">
                   <div className="block py-2 hover:bg-sky-600 transition-all delay-75 hover:text-slate-100 cursor-pointer text-slate-900">
                     <span className="px-2">Account Settings</span>

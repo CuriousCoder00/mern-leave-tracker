@@ -37,6 +37,19 @@ const applyLeave = async (req, res, next) => {
   }
 };
 
+const fetchAllLeaves = async (req, res) => {
+  try {
+    const leaves = await Leave.find({ user: req.user.id });
+    res.json({
+      success: true,
+      leaves,
+    });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+}
+
 module.exports = {
-  applyLeave,
+  applyLeave, fetchAllLeaves
 };
