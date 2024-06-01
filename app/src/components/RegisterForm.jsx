@@ -1,37 +1,53 @@
 import { useState } from "react";
 import { FaCheck, FaTimes } from "react-icons/fa";
-
+import axios from "axios";
 const initialState = {
   name: "",
   email: "",
   password: "",
-  confirmPassword: "",
 };
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const RegisterForm = () => {
+const RegisterForm = (props) => {
+  // eslint-disable-next-line react/prop-types
+  const { setLoginToggle } = props;
   const [register, setRegister] = useState(initialState);
   const [error, setError] = useState("");
   const onInputChange = (e) => {
     setRegister({ ...register, [e.target.name]: e.target.value });
   };
-  const matchResult = register.password === register.confirmPassword;
-
+  const notifySuccess = () => toast.success("Registration Successful !");
+  const notifyError = () => toast.error("Registration Failed !");
   const passwordValidationResult =
     register.password.length >= 8 &&
     /[A-Z]/.test(register.password) &&
     /[a-z]/.test(register.password) &&
     /[@$!%*?&]/.test(register.password);
 
+  // eslint-disable-next-line no-undef
+  const url = "http://localhost:3001";
   // handle registration
   const handleRegistration = async (e) => {
     e.preventDefault();
-    if (matchResult && passwordValidationResult) {
-      console.log('....');
+    try {
+      const response = await axios.post(`${url}/api/register`, {
+        name: register.name,
+        email: register.email,
+        password: register.password,
+      });
+      if (response.data.success) {
+        notifySuccess();
+        setLoginToggle("login");
+      }
+    } catch (error) {
+      notifyError();
+      setError(error.response.data.msg);
     }
   };
 
   return (
-    <form className="flex flex-col gap-4 w-full mt-4">
+    <div className="flex flex-col gap-4 w-full mt-4">
       <input
         type="text"
         name="name"
@@ -61,21 +77,7 @@ const RegisterForm = () => {
         required
       />
 
-      <input
-        type="password"
-        name="confirmPassword"
-        id="confirmPassword"
-        placeholder="Confirm Password"
-        autoComplete="new-password"
-        onChange={(e) => onInputChange(e)}
-        className={`p-2 border-2 focus:outline-none ${
-          !matchResult
-            ? "focus:border-red-400 shadow-lg shadow-red-400"
-            : "focus:border-emerald-500 shadow-lg shadow-emerald-400"
-        } rounded-md text-slate-600`}
-        required
-      />
-      {matchResult && passwordValidationResult ? (
+      {passwordValidationResult ? (
         <div className="flex text-xs items-center gap-2 text-slate-300">
           <FaCheck className="text-emerald-500" />
           All password validations passed successfully
@@ -134,12 +136,26 @@ const RegisterForm = () => {
       )}
       {error && <div className="text-red-500 text-xs text-center">{error}</div>}
       <button
+        disabled={!passwordValidationResult}
         className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-500"
         onClick={handleRegistration}
       >
         Register
       </button>
-    </form>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition:Bounce
+      />
+    </div>
   );
 };
 

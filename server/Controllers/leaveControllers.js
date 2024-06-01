@@ -48,8 +48,27 @@ const fetchAllLeaves = async (req, res) => {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
-}
+};
+
+const deleteLeave = async (req, res) => {
+  try {
+    const leave = await Leave.findById(req.params.id);
+    if (!leave) {
+      return res.status(404).json({ msg: "Leave not found" });
+    }
+    if (leave.user.toString() !== req.user.id) {
+      return res.status(401).json({ msg: "User not authorized" });
+    }
+    await leave.deleteOne();
+    res.json({ msg: "Leave removed" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 module.exports = {
-  applyLeave, fetchAllLeaves
+  applyLeave,
+  fetchAllLeaves,
+  deleteLeave,
 };

@@ -1,7 +1,13 @@
 import { useState } from "react";
-
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const LeaveApplicationForm = () => {
   // calculate leave duration
+  const notifySuccess = () => toast.success("Leave Submitted Successfully !");
+  const notifyError = () => toast.error("Leave Submission Failed !");
+  const [leaveType, setLeaveType] = useState("");
+  const [reason, setReason] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   // get current date
@@ -16,16 +22,64 @@ const LeaveApplicationForm = () => {
   const calculatedLeaveDuration = Math.round(
     Math.abs(Math.ceil((firstDate - secondDate) / oneDay))
   );
+
+  const handleLeaveTypeChange = (e) => {
+    e.preventDefault();
+    setLeaveType(e.target.value);
+  };
   const handleStartDateChange = (e) => {
     e.preventDefault();
     setStartDate(e.target.value);
-    console.log(startDate);
   };
   const handleEndDateChange = (e) => {
     e.preventDefault();
     setEndDate(e.target.value);
   };
+  const handleReasonChange = (e) => {
+    e.preventDefault();
+    setReason(e.target.value);
+  };
 
+  const handleLeaveSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3001/api/apply-leave",
+        {
+          leaveType: leaveType,
+          startDate: startDate,
+          endDate: endDate,
+          leaveDuration: calculatedLeaveDuration,
+          reason: reason,
+        },
+        {
+          headers: {
+            "auth-token": token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log(response.data);
+      notifySuccess();
+      setLeaveType("");
+      setStartDate("");
+      setEndDate("");
+      setReason("");
+    } catch (error) {
+      console.error(error);
+      notifyError();
+    }
+  };
+
+  const onReset = (e) => {
+    e.preventDefault();
+    setLeaveType("");
+    setStartDate("");
+    setEndDate("");
+    setReason("");
+    toast.info("Form reset successful !");
+  };
   return (
     <div className="flex mt-2 flex-col gap-5 shadow-md shadow-sky-900 w-full p-4 rounded-lg">
       <div>
@@ -37,18 +91,24 @@ const LeaveApplicationForm = () => {
           <select
             name="leaveType"
             id="leaveType"
+            required
+            value={leaveType}
+            onChange={handleLeaveTypeChange}
             className="outline-none p-1 text-slate-700 rounded-lg shadow-md"
           >
             <option value="">Select Your Leave Type</option>
-            <option value="paid">Sick</option>
-            <option value="unpaid">Casual</option>
-            <option value="other">Earned</option>
+            <option value="sick">Sick</option>
+            <option value="casual">Casual</option>
+            <option value="earned">Earned</option>
+            <option value="other">Other</option>
           </select>
         </div>
         <div className="flex flex-col w-full lg:w-1/6 md:w-1/6 sm:w-1/4">
           <label htmlFor="startDate">Start Date</label>
           <input
             type="date"
+            required
+            value={startDate}
             name="startDate"
             id="startDate"
             min={currentDate}
@@ -60,6 +120,8 @@ const LeaveApplicationForm = () => {
           <label htmlFor="endDate">End Date</label>
           <input
             type="date"
+            required
+            value={endDate}
             name="endDate"
             id="endDate"
             min={startDate}
@@ -71,12 +133,11 @@ const LeaveApplicationForm = () => {
           <label htmlFor="leaveDuration">Leave Duration</label>
           <input
             type="text"
-            name="employeeName"
-            id="employeeName"
+            required
+            name="duration"
+            id="duration"
             value={
-              calculatedLeaveDuration
-                ? calculatedLeaveDuration + " Days"
-                : ""
+              calculatedLeaveDuration ? calculatedLeaveDuration + " Days" : ""
             }
             className="outline-none p-1 rounded-lg shadow-md"
             readOnly
@@ -86,6 +147,8 @@ const LeaveApplicationForm = () => {
           <label htmlFor="reason">Reason</label>
           <textarea
             rows="3"
+            value={reason}
+            onChange={handleReasonChange}
             name="reason"
             id="reason"
             className="resize-none outline-none p-1 text-slate-700 rounded-lg shadow-md"
@@ -93,12 +156,31 @@ const LeaveApplicationForm = () => {
         </div>
       </div>
       <div className="flex gap-4 justify-center">
-        <button className="bg-green-700 hover:bg-green-600 text-sky-100 p-2 rounded-lg w-20">
+        <button
+          className="bg-green-700 hover:bg-green-600 text-sky-100 outline-none p-2 rounded-lg w-20"
+          onClick={handleLeaveSubmit}
+        >
           Submit
         </button>
-        <button className="bg-red-700 hover:bg-red-600 text-sky-100 p-2 rounded-lg w-20">
+        <button
+          className="bg-red-700 hover:bg-red-600 outline-none text-sky-100 p-2 rounded-lg w-20"
+          onClick={onReset}
+        >
           Reset
         </button>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition:Bounce
+        />
       </div>
     </div>
   );

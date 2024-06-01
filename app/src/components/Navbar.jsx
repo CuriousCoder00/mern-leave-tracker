@@ -5,18 +5,25 @@ import Logo from "./Logo";
 import AVATAR from "../assets/avatar.png";
 import { VscClose, VscMenu } from "react-icons/vsc";
 import { GoSignOut } from "react-icons/go";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const Navbar = (props) => {
   // eslint-disable-next-line react/prop-types
-  const { toggleNav, setToggleNav } = props;
+  const { toggleNav, setToggleNav, isUserAuthenticated } = props;
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const notifySuccess = () => toast.success("Logout Successful !");
+  const handleLogout = () => {
+    notifySuccess();
+    localStorage.removeItem("token");
+    isUserAuthenticated(false);
+  };
 
   return (
     <>
       <div className={`justify-between flex items-center p-5 transition-all`}>
         <div className="flex gap-5 items-center">
-          <Link to="/"  className='hover:scale-95 transition-all delay-100'>
-            <Logo/>
+          <Link to="/" className="hover:scale-95 transition-all delay-100">
+            <Logo />
           </Link>
           {toggleNav ? (
             <div className="flex">
@@ -36,7 +43,9 @@ const Navbar = (props) => {
         </div>
         <div className="relative">
           <button
-            className={`rounded-full ${showProfileMenu?"shadow-md shadow-sky-500 border-[1px]":""} overflow-hidden cursor-pointer hover:scale-110 transition-all delay-75`}
+            className={`rounded-full ${
+              showProfileMenu ? "shadow-md shadow-sky-500 border-[1px]" : ""
+            } overflow-hidden cursor-pointer hover:scale-110 transition-all delay-75`}
             onClick={() => {
               setShowProfileMenu(!showProfileMenu);
             }}
@@ -52,13 +61,26 @@ const Navbar = (props) => {
               <div className="flex mt-2 right-0 bg-white absolute z-20 justify-center items-start rounded-lg">
                 <div className="w-52 py-3">
                   <div className="block py-2 hover:bg-sky-600 transition-all delay-75 hover:text-slate-100 cursor-pointer text-slate-900">
-                    <span className="px-2">Account Settings</span>
+                    <Link to="account" className="px-2" onClick={()=>setShowProfileMenu(!showProfileMenu)}>Account Settings</Link>
                   </div>
                   <div className="block py-2 hover:bg-sky-600 transition-all delay-75  hover:text-slate-100 cursor-pointer text-slate-900">
-                    <span className="px-2">
+                    <span className="px-2" onClick={handleLogout}>
                       Logout
                       <GoSignOut className="inline mx-2" />
                     </span>
+                    <ToastContainer
+                      position="top-center"
+                      autoClose={5000}
+                      hideProgressBar={false}
+                      newestOnTop={false}
+                      closeOnClick
+                      rtl={false}
+                      pauseOnFocusLoss
+                      draggable
+                      pauseOnHover
+                      theme="light"
+                      transition:Bounce
+                    />
                   </div>
                 </div>
               </div>

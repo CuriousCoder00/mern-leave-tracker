@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,15 +14,21 @@ import Sidebar from "./components/Sidebar";
 import History from "./pages/History";
 import PageNotFound from "./pages/PageNotFound";
 import Vacations from "./pages/Vacations";
+import AccountSettings from "./pages/AccountSettings";
+import DataProvider from "./context/DataProvider";
 
 function App() {
-  const [isAuthenticated, isUserAuthenticated] = useState(true);
+  const [isAuthenticated, isUserAuthenticated] = useState(false);
   const [toggleNav, setToggleNav] = useState(false);
   // eslint-disable-next-line react/prop-types
   const PrivateRoute = ({ isAuthenticated }) => {
     return isAuthenticated ? (
       <>
-        <Navbar toggleNav={toggleNav} setToggleNav={setToggleNav} />
+        <Navbar
+          toggleNav={toggleNav}
+          setToggleNav={setToggleNav}
+          isUserAuthenticated={isUserAuthenticated}
+        />
         <div className="flex">
           <div
             className={`${
@@ -42,17 +48,15 @@ function App() {
       <Navigate to="/login" />
     );
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      isUserAuthenticated(true);
-    }
-  }, []);
   return (
+    <DataProvider>
     <Router>
       <Routes>
-        <Route exact path="/login" element=<Login /> />
+        <Route
+          exact
+          path="/login"
+          element=<Login isUserAuthenticated={isUserAuthenticated} />
+        />
         <Route
           path="/"
           element={<PrivateRoute isAuthenticated={isAuthenticated} />}
@@ -75,17 +79,19 @@ function App() {
           path="/"
           element={<PrivateRoute isAuthenticated={isAuthenticated} />}
         >
-          <Route
-            path="/*"
-            element={
-              <div className="w-screen h-screen absolute top-0 left-0">
-                <PageNotFound />
-              </div>
-            }
-          />
+          <Route exact path="/account" element=<AccountSettings /> />
         </Route>
+        <Route
+          path="/*"
+          element={
+            <div className="w-screen h-screen absolute top-0 left-0">
+              <PageNotFound />
+            </div>
+          }
+        />
       </Routes>
     </Router>
+    </DataProvider>
   );
 }
 
