@@ -97,7 +97,7 @@ const History = () => {
             {leaves.map((leave) => (
               <div
                 className="row bg-white text-slate-600 m-2 py-1 shadow-md"
-                key={leave._id}
+                key={leave.id}
               >
                 <div className="grid-cols-6 grid place-items-center">
                   <div className="col-span-1 border-b-slate-300 uppercase">
@@ -120,7 +120,7 @@ const History = () => {
                     <button
                       className="bg-red-500 ml-4 text-white p-1 rounded-md"
                       onClick={() => {
-                        deleteLeave(leave._id);
+                        deleteLeave(leave.id);
                       }}
                     >
                       <MdDelete />
