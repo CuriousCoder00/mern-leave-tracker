@@ -40,12 +40,14 @@ const LeaveApplicationForm = () => {
     setReason(e.target.value);
   };
 
+  const url = "https://mern-leave-tracker.onrender.com";
+
   const handleLeaveSubmit = async (e) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:3001/api/apply-leave",
+        `${url}/api/apply-leave`,
         {
           leaveType: leaveType,
           startDate: startDate,

@@ -26,7 +26,7 @@ const RegisterForm = (props) => {
     /[@$!%*?&]/.test(register.password);
 
   // eslint-disable-next-line no-undef
-  const url = "http://localhost:3001";
+  const url = "https://mern-leave-tracker.onrender.com";
   // handle registration
   const handleRegistration = async (e) => {
     e.preventDefault();

@@ -15,7 +15,7 @@ const History = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/get-all-leaves/${user._id}`,
+          `https://mern-leave-tracker.onrender.com/api/get-all-leaves/${user._id}`,
           {
             headers: {
               "auth-token": token,
@@ -55,7 +55,7 @@ const History = () => {
   const deleteLeave = async (id) => {
     try {
       const response = await axios.delete(
-        `http://localhost:3001/api/delete-leave/${id}`,
+        `https://mern-leave-tracker.onrender.com/api/delete-leave/${id}`,
         {
           headers: {
             "auth-token": localStorage.getItem("token"),

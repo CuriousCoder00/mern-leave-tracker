@@ -24,7 +24,7 @@ const LoginForm = (props) => {
     setLoginStates({ ...loginStates, [e.target.name]: e.target.value });
   };
 
-  const url = "http://localhost:3001";
+  const url = "https://mern-leave-tracker.onrender.com";
 
   const handleLogin = async (e) => {
     e.preventDefault();
