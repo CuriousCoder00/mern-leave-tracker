@@ -5,46 +5,47 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 // import DataProvider from "../context/DataProvider";
 import { DataContext } from "../context/DataContext";
+import Loader from "./loader/Loader";
 const LoginInitial = {
   email: "",
   password: "",
 };
 
-const LoginForm = (props) => {
+const LoginForm = () => {
   const [loginStates, setLoginStates] = useState(LoginInitial);
-  const [error, setError] = useState(null);
+  const [err, setErr] = useState(null);
+  const [loading, setLoading] = useState(false);
   // eslint-disable-next-line react/prop-types
-  const { isUserAuthenticated } = props;
-  const { setAccount } = useContext(DataContext);
+  const { onLogin } = useContext(DataContext);
 
   const navigate = useNavigate();
-  const notifySuccess = () => toast.success("Login Successful !");
-  const notifyError = () => toast.error("Login Failed !");
   const handleValueChange = (e) => {
     setLoginStates({ ...loginStates, [e.target.name]: e.target.value });
   };
 
-  const url = "https://mern-leave-tracker.onrender.com";
+  const notifyError = () => toast.error(`${err}`);
+  const url = import.meta.env.VITE_URL;
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      setLoading(true);
       const response = await axios.post(`${url}/api/login`, {
         email: loginStates.email,
         password: loginStates.password,
       });
       if (response.data.success) {
-        notifySuccess();
-        localStorage.setItem("token", response.data.token);
-        isUserAuthenticated(true);
+        onLogin(response.data.token, response.data.user);
+        setLoading(false);
         navigate("/");
-        setAccount(response.data.user);
       } else {
-        setError("Something went wrong...");
+        setLoading(false);
+        setErr("Something went wrong...");
       }
     } catch (error) {
+      setErr(error.response.data.msg);
       notifyError();
-      setError(error.response.data.msg);
+      setLoading(false);
     }
   };
   return (
@@ -63,18 +64,15 @@ const LoginForm = (props) => {
         name="password"
         required
         onChange={handleValueChange}
-        autoComplete="new-password"
+        autoComplete="current-password"
         placeholder="Enter Your Password..."
         className="p-2 border-b-2 border-sky-300 focus:outline-none focus:border-sky-500 rounded-md text-slate-600"
       />
-      {error && (
-        <div className="text-pink-500 text-center text-sm">{error}</div>
-      )}
       <button
-        className="bg-sky-600 text-white p-2 rounded-lg hover:bg-sky-500"
+        className="bg-sky-600 text-white text-center flex justify-center h-10 items-center p-2 rounded-lg hover:bg-sky-500"
         onClick={handleLogin}
       >
-        Login
+        {loading ? <Loader /> : "Login"}
       </button>
       <ToastContainer
         position="top-center"

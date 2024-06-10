@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 const LeaveApplicationForm = () => {
   // calculate leave duration
   const notifySuccess = () => toast.success("Leave Submitted Successfully !");
-  const notifyError = () => toast.error("Leave Submission Failed !");
+  const notifyError = (err) => toast.error(err);
   const [leaveType, setLeaveType] = useState("");
   const [reason, setReason] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -40,7 +40,7 @@ const LeaveApplicationForm = () => {
     setReason(e.target.value);
   };
 
-  const url = "https://mern-leave-tracker.onrender.com";
+  const url = import.meta.env.VITE_URL;
 
   const handleLeaveSubmit = async (e) => {
     e.preventDefault();
@@ -63,14 +63,13 @@ const LeaveApplicationForm = () => {
         }
       );
       console.log(response.data);
-      notifySuccess();
+      notifySuccess()
       setLeaveType("");
       setStartDate("");
       setEndDate("");
       setReason("");
     } catch (error) {
-      console.error(error);
-      notifyError();
+      notifyError("invalid data or empty fields")
     }
   };
 

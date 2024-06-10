@@ -104,9 +104,28 @@ const userLogout = async (req, res) => {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
+};
 
-}
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    user.name = req.body.name;
+    user.email = req.body.email;
+    let password = req.body.password;
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+
+    await user.save();
+    res.json({ user });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+};
 
 module.exports = {
-  userRegistration, userLogin, userLogout
+  userRegistration,
+  userLogin,
+  userLogout,
+  updateUser
 };

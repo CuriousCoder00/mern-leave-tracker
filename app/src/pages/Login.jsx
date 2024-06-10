@@ -2,9 +2,7 @@ import { useState } from "react";
 import LoginForm from "../components/LoginForm";
 import Logo from "../components/Logo";
 import RegisterForm from "../components/RegisterForm";
-const Login = (props) => {
-  // eslint-disable-next-line react/prop-types
-  const { isUserAuthenticated } = props;
+const Login = () => {
   const [loginToggle, setLoginToggle] = useState("login");
 
   return (
@@ -30,7 +28,7 @@ const Login = (props) => {
           </span>
           <Logo />
           {loginToggle === "login" ? (
-            <LoginForm isUserAuthenticated={isUserAuthenticated} />
+            <LoginForm/>
           ) : (
             <RegisterForm setLoginToggle={setLoginToggle} />
           )}

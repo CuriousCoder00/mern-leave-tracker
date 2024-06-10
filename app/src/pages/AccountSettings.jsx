@@ -1,8 +1,32 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DataContext } from "../context/DataContext";
-
+import axios from "axios";
 const AccountSettings = () => {
-  const { account } = useContext(DataContext);
+  const url = import.meta.env.VITE_URL;
+  const { user, token } = useContext(DataContext);
+  const initialValue = {
+    name: user.name,
+    email: user.email,
+    password: user.password,
+  };
+  const [data, setData] = useState(initialValue);
+  const onValueChange = (e) => {
+    setData({ ...data, [e.target.name]: [e.target.value] });
+  };
+
+  const updateUser = async () => {
+    try {
+      const response = await axios.put(`${url}/api/update/user`, data.name.toString(), data.email.toString(), data.password, {
+        headers: {
+          "auth-token": token,
+        },
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="p-2 flex flex-col justify-center">
       <div className="overflow-auto w-full h-[85vh]">
@@ -25,78 +49,49 @@ const AccountSettings = () => {
               </span>
             </div>
             <div className="w-full h-[1px] bg-slate-300"></div>
-            <div className="flex md:flex-row flex-col gap-2 w-full text-slate-700 p-4 rounded-lg">
-              <div className="flex flex-col w-full">
+            <div className="flex flex-col gap-2 md:w-1/2 w-full text-slate-700 p-4 rounded-lg">
+              <div className="flex flex-col">
                 <label htmlFor="name" className="font-semibold">
                   Full name
                 </label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    className="outline-none w-full focus:outline-none p-2 rounded-lg text-black font-semibold"
-                    value={account.name}
-                  />
-                  <button className="bg-blue-700 rounded-lg px-3 text-white">
-                    Update
-                  </button>
-                </div>
+                <input
+                  type="text"
+                  name="name"
+                  className="outline-none w-full focus:outline-none p-2 rounded-lg text-black font-semibold"
+                  onChange={onValueChange}
+                  placeholder={data.name}
+                />
               </div>
               <div className="flex w-full flex-col">
                 <label htmlFor="email" className="font-semibold">
                   Email
                 </label>
-                <div className="flex w-full">
-                  <input
-                    type="text"
-                    className="outline-none w-full focus:outline-none p-2 rounded-lg text-slate-500"
-                    value={account.email}
-                  />
-                  <button className="bg-blue-700 rounded-lg px-3 text-white">
-                    Update
-                  </button>
-                </div>
+                <input
+                  type="email"
+                  name="email"
+                  className="outline-none w-full focus:outline-none p-2 rounded-lg text-slate-500"
+                  placeholder={data.email}
+                  onChange={onValueChange}
+                />
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="w-full">
-            <div className="p-2">
-              <h2 className="text-lg font-semibold text-slate-700">
-                Change Password
-              </h2>
-              <div className="text-sm text-slate-500">Manage your password</div>
-            </div>
-            <div className="w-full h-[1px] bg-slate-300"></div>
-            <div className="flex md:flex-row flex-col gap-2 w-full text-slate-700 p-4 rounded-lg">
-              <div className="flex flex-col w-full">
-                <label htmlFor="currentPassword" className="font-semibold">
-                  Current Password
-                </label>
-                <div className="flex gap-2">
-                  <input
-                    type="password"
-                    className="outline-none w-full focus:outline-none p-2 rounded-lg text-black font-semibold"
-                    placeholder="Enter your current password"
-                  />
-                </div>
-              </div>
-              <div className="flex w-full flex-col">
+              <div className="flex flex-col text-slate-700 rounded-lg">
                 <label htmlFor="newPassword" className="font-semibold">
                   New Password
                 </label>
                 <div className="flex w-full">
                   <input
-                    type="password"
+                    type="password" name="password"
+                    onChange={onValueChange}
                     className="outline-none w-full focus:outline-none p-2 rounded-lg text-slate-500"
                     placeholder="Enter your new password"
                   />
                 </div>
               </div>
-            </div>
-            <div className="px-3">
-              <button className="p-2 w-full md:w-64 bg-blue-700 text-white rounded-lg">
-                Update Password
+              <button
+                className="p-2 mt-3 bg-blue-700 text-white rounded-lg"
+                onClick={updateUser}
+              >
+                Update User
               </button>
             </div>
           </div>
